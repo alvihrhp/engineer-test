@@ -21,31 +21,33 @@
     "reset": "tsx scripts/reset.ts"
   },
   "dependencies": {
+    "@emotion/cache": "^11.0.0",
+    "@emotion/react": "^11.0.0",
+    "@emotion/server": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@hookform/resolvers": "^5.2.2",
+    "@mui/material": "^6.0.0",
+    "@mui/material-nextjs": "^6.0.0",
+    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-query-devtools": "^5.0.0",
+    "mongodb-memory-server": "^10.0.0",
+    "mongoose": "^8.0.0",
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@mui/material": "^6.0.0",
-    "@mui/material-nextjs": "^6.0.0",
-    "@emotion/react": "^11.0.0",
-    "@emotion/styled": "^11.0.0",
-    "@emotion/cache": "^11.0.0",
-    "@emotion/server": "^11.0.0",
-    "@tanstack/react-query": "^5.0.0",
-    "@tanstack/react-query-devtools": "^5.0.0",
-    "mongoose": "^8.0.0",
-    "mongodb-memory-server": "^10.0.0",
+    "react-hook-form": "^7.74.0",
     "zod": "^3.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "vitest": "^2.0.0",
     "@vitejs/plugin-react": "^4.0.0",
     "jsdom": "^25.0.0",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/jest-dom": "^6.0.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
   }
 }

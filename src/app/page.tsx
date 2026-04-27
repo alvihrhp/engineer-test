@@ -1,6 +1,8 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import NextLink from 'next/link';
 
@@ -15,24 +17,26 @@ export default function HomePage() {
       </Typography>
 
       <Box sx={{ mb: 4 }}>
-        <Typography variant="body1" sx={{ mb: 1 }}>
-          👋 Welcome, candidate! Start by reading <strong>CANDIDATE.md</strong> at the root of
-          this repository — it contains the task brief, requirements, and timebox guidance.
-        </Typography>
         <Typography variant="body1">
-          An example implementation (conventions you should follow) lives at{' '}
-          <Link component={NextLink} href="/recipes-example">
-            /recipes-example
-          </Link>
-          . Review the source code there before building your own feature.
+          Browse, create, and manage recipes. Use the button below to open the recipe list,
+          where you can search, filter by tags or difficulty, and paginate through results.
         </Typography>
       </Box>
 
-      <Box>
-        <Link component={NextLink} href="/recipes-example" variant="button">
-          View example page →
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 4 }}>
+        <Button
+          component={NextLink}
+          href="/recipes"
+          variant="contained"
+          size="large"
+          data-testid="browse-recipes-cta"
+        >
+          Browse Recipes
+        </Button>
+        <Link component={NextLink} href="/recipes-example" variant="body2">
+          View example reference →
         </Link>
-      </Box>
+      </Stack>
     </Container>
   );
 }

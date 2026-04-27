@@ -1,51 +1,21 @@
-import { z } from 'zod';
 import mongoose, { type Document, type Model } from 'mongoose';
+import type { TCreateRecipeInput } from './recipe-zod';
+
+// Re-export the Zod / shape layer so existing server-side imports keep
+// working. Client code that needs runtime values (RecipeSchema, constants)
+// should import directly from './recipe-zod' to avoid pulling mongoose into
+// the client bundle.
+export * from './recipe-zod';
 
 // ---------------------------------------------------------------------------
-// Zod schemas — define SHAPE only.
-// Business rules (uniqueness, length limits, dedup logic, etc.) are NOT
-// enforced here; they are part of the interview challenge for the candidate.
-// ---------------------------------------------------------------------------
-
-export const IngredientSchema = z.object({
-  name: z.string(),
-  qty: z.number(),
-  unit: z.string(),
-});
-
-export type TIngredient = z.infer<typeof IngredientSchema>;
-
-export const RecipeSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  servings: z.number().int().positive(),
-  prepMin: z.number().int().nonnegative(),
-  cookMin: z.number().int().nonnegative(),
-  difficulty: z.enum(['easy', 'medium', 'hard']),
-  tags: z.array(z.string()),
-  ingredients: z.array(IngredientSchema),
-  steps: z.array(z.string()),
-});
-
-export type TCreateRecipeInput = z.infer<typeof RecipeSchema>;
-
-export const RecipeDocumentSchema = RecipeSchema.extend({
-  _id: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-export type TRecipeDocument = z.infer<typeof RecipeDocumentSchema>;
-
-// ---------------------------------------------------------------------------
-// Mongoose schema
+// Mongoose schema (server-only)
 // ---------------------------------------------------------------------------
 
 const ingredientMongooseSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
     qty: { type: Number, required: true },
-    unit: { type: String, required: true },
+    unit: { type: String, required: true, trim: true },
   },
   { _id: false }
 );
@@ -53,7 +23,7 @@ const ingredientMongooseSchema = new mongoose.Schema(
 const recipeMongooseSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
-    description: { type: String, required: true },
+    description: { type: String, required: true, trim: true },
     servings: { type: Number, required: true },
     prepMin: { type: Number, required: true },
     cookMin: { type: Number, required: true },
@@ -69,6 +39,14 @@ const recipeMongooseSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
+);
+
+// Case-insensitive unique index on title. Strength 2 = case- and
+// diacritic-insensitive comparison. Combined with normalizeTitle (trim) at
+// the API boundary, this enforces "trimmed + case-insensitive uniqueness".
+recipeMongooseSchema.index(
+  { title: 1 },
+  { unique: true, collation: { locale: 'en', strength: 2 } }
 );
 
 // HMR-safe model creation (prevents "Cannot overwrite model" error in Next.js dev)
